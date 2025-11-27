@@ -1,0 +1,2 @@
+move target out of bounds: WebDriverError: move target out of bounds
+  (Session info: chrome=142.0.7444.176) when running "actions" with method "POST" and args "{"actions":[{"id":"action1","type":"wheel","parameters":{},"actions":[{"type":"scroll","x":-1452,"y":-48,"deltaX":0,"deltaY":0,"duration":0,"origin":{"element-6066-11e4-a52e-4f735466cecf":"f.5B1416BCDBBCC6C5FB8E21F0A72CBD1C.d.C78AE5B4E0A3B1A07C674DD79F6888C3.e.6"}}]}]}"

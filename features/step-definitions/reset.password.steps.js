@@ -7,7 +7,7 @@ import { expect } from '@wdio/globals';
 const EXISTING_EMAIL = 'vadym.automation@test.com';
 const NEW_PASSWORD = 'Roland_154875';
 const SECURITY_ANSWER = 'My brother';
-
+/*
 Given(/^I open landing page$/, async () => {
     await HomePage.open();
 });
@@ -48,7 +48,7 @@ When(/^I press log in$/, async () => {
     await browser.execute((el) => el.click(), loginBtn);
     await browser.pause(1000);
 });
-
+*/
 When(/^I press 'forgot password'$/, async () => {
     const resetPasswordLink = await LoginPage.resetPasswordLink;
     await browser.execute((el) => el.click(), resetPasswordLink);
@@ -59,10 +59,30 @@ When(/^I enter email in forgot email page$/, async () => {
     await resetPasswordPage.fillEmail(EXISTING_EMAIL);
 });
 
-When(/^I click on security question field'$/, async () => {
+When(/^I click on security question field$/, async () => {
     const securityQuestion = await resetPasswordPage.securityQuestionInput;
-    await securityQuestion.waitForDisplayed({ timeout: 10000 });
     await browser.execute((el) => el.click(), securityQuestion);
     await browser.pause(1000);
+});
+
+When(/^I see security question$/, async () => {
+    const securityQuestion = await resetPasswordPage.securityQuestionInput;
+    await expect(securityQuestion).toBeDisplayed();
+});
+
+When(/^I enter security question$/, async () => {
+    await resetPasswordPage.fillQuestion(SECURITY_ANSWER);
+});
+
+When(/^I enter new password and confirm$/, async () => {
+    await resetPasswordPage.fillPassword(NEW_PASSWORD);
+    const submitButton = await resetPasswordPage.resetPasswordButton;
+    await browser.execute((el) => el.click(), submitButton);
+    await browser.pause(1000);
+});
+
+Then(/^I see message about successfully changed password$/, async () => {
+    await resetPasswordPage.successMessage.waitForDisplayed({ timeout: 5000 });
+    await expect(resetPasswordPage.successMessage).toBeDisplayed();
 });
 

@@ -7,7 +7,7 @@ import { expect } from '@wdio/globals';
 const EXISTING_EMAIL = 'vadym.automation@test.com';
 const PASSWORD = 'Test1234!';
 const SECURITY_ANSWER = 'My brother';
-
+/*
 Given(/^I open landing page$/, async () => {
     await HomePage.open();
 });
@@ -49,7 +49,7 @@ When(/^I press log in$/, async () => {
     await browser.pause(1000);
 });
 
-
+*/
 When(/^I press not yet a customer$/, async () => {
     await LoginPage.goToRegistration();
 });

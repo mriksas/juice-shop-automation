@@ -20,6 +20,10 @@ class ResetPasswordPage
         return $('#resetButton');
     }
 
+    get successMessage() {
+        return $('//*[contains(text(),"Your password was successfully changed.")]');
+    }
+
     async fillEmail(email) {
         await this.emailInput.setValue(email);
     }
@@ -29,8 +33,8 @@ class ResetPasswordPage
         await this.repeatNewPasswordInput.setValue(password);
     }
 
-    async fillAnswer(answer) {
-        await this.securityAnswerInput.setValue(answer);
+    async fillQuestion(answer) {
+        await this.securityQuestionInput.setValue(answer);
     }
 }
 

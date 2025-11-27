@@ -129,7 +129,9 @@ export const config = {
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
         require: [
-            './features/step-definitions/reset.password.steps.js'
+            './features/step-definitions/common.steps.js',   
+            './features/step-definitions/register.steps.js', 
+            './features/step-definitions/reset.password.steps.js',
         ],
         // <boolean> show full backtrace for errors
         backtrace: false,
