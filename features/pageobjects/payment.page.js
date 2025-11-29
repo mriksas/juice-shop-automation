@@ -2,10 +2,11 @@
 
 class PaymentPage {
     //
-    // ---------- МЕНЮ ACCOUNT ----------
+    // ---------- ACCOUNT MENU ----------
     //
 
-    // Шаг: And I press on Orders and Payments
+    // Step: And I press on Orders and Payments
+    // Opens the "Orders & Payment" menu item by clicking it through JS.
     async openOrdersAndPayment () {
         await browser.execute(() => {
             const buttons = Array.from(
@@ -19,7 +20,8 @@ class PaymentPage {
         await browser.pause(400);
     }
 
-    // Шаг: And I press My Payment options
+    // Step: And I press My Payment options
+    // Same logic as above – finds and clicks “My Payment Options”.
     async openMyPaymentOptions () {
         await browser.execute(() => {
             const buttons = Array.from(
@@ -34,19 +36,20 @@ class PaymentPage {
     }
 
     //
-    // ---------- ЭЛЕМЕНТЫ СТРАНИЦЫ "My Payment Options" ----------
+    // ---------- ELEMENTS ON "MY PAYMENT OPTIONS" PAGE ----------
     //
 
+    // Page title “My Payment Options”
     get myPaymentOptionsTitle () {
         return $('//h1[contains(.,"My Payment Options")]');
     }
 
-    // sam mat-expansion-panel с заголовком "Add new card"
+    // Expansion panel that contains the “Add new card” form
     get addCardPanel () {
         return $('//mat-expansion-panel[contains(.,"Add new card")]');
     }
 
-    // Name*
+    // Input field: Name*
     get nameInput () {
         return $(
             '//mat-expansion-panel[contains(.,"Add new card")]' +
@@ -54,7 +57,7 @@ class PaymentPage {
         );
     }
 
-    // Card Number*
+    // Input field: Card Number*
     get cardNumberInput () {
         return $(
             '//mat-expansion-panel[contains(.,"Add new card")]' +
@@ -62,39 +65,37 @@ class PaymentPage {
         );
     }
 
-    // Expiry Month* — первый <select> в панели
-    // Expiry Month* — первый select на странице
+    // Expiry Month* — the first <select> on the page
     get expiryMonthSelect () {
         return $('(//select)[1]');
     }
 
-    // Expiry Year* — последний select на странице
+    // Expiry Year* — the last <select> on the page
     get expiryYearSelect () {
         return $('(//select)[last()]');
     }
 
-
-    // Кнопка Submit внутри панели
+    // Submit button inside the Add Card panel
     get submitCardButton () {
         return $('#submitButton');
     }
 
-    // Карточка по имени владельца
+    // Locates saved card by cardholder name
     cardRowByName (name) {
         return $(`//mat-card//*[contains(text(),"${name}")]/ancestor::mat-card`);
     }
 
     //
-    // ---------- ВСПОМОГАТЕЛЬНОЕ ----------
+    // ---------- HELPERS ----------
     //
+
+    // Clicks the Submit button through JS to avoid “element not clickable” issues
     async clickSubmitCardButton () {
         const btn = await this.submitCardButton;
 
-        // на всякий случай скроллим к ней
         await btn.scrollIntoView();
         await browser.pause(200);
 
-        // жмём через JS, чтобы обойти любые "not clickable"
         await browser.execute(el => {
             if (el instanceof HTMLElement) {
                 el.click();
@@ -103,7 +104,9 @@ class PaymentPage {
 
         await browser.pause(500);
     }
-    // Шаг: When I press add new card
+
+    // Step: When I press add new card
+    // Expands the “Add new card” panel if it's collapsed, then waits for the form to load.
     async openAddNewCardForm () {
         const panel = await this.addCardPanel;
         await panel.waitForExist({ timeout: 10000 });
@@ -111,11 +114,12 @@ class PaymentPage {
         const classes = await panel.getAttribute('class');
         const isExpanded = classes && classes.includes('mat-expanded');
 
+        // If panel is closed — expand it
         if (!isExpanded) {
             const header = await panel.$('mat-expansion-panel-header');
             await header.waitForExist({ timeout: 5000 });
 
-            // кликаем header через JS, чтобы не ловить "not clickable"
+            // Click header through JS to avoid click interception
             await browser.execute(el => {
                 if (el instanceof HTMLElement) el.click();
             }, header);
@@ -123,12 +127,13 @@ class PaymentPage {
             await browser.pause(700);
         }
 
+        // Wait until “Name” input is visible and enabled (form fully loaded)
         const name = await this.nameInput;
         await name.waitForDisplayed({ timeout: 10000 });
         await name.waitForEnabled({ timeout: 10000 });
     }
 
-    // универсальный helper для native <select>
+    // Helper to set a value in a native <select> by visible text
     async setNativeSelect(selectElem, visibleText) {
         const el = await selectElem;
         await el.waitForExist({ timeout: 10000 });
@@ -156,11 +161,12 @@ class PaymentPage {
     }
 
     //
-    // ---------- ЗАПОЛНЕНИЕ ФОРМЫ КАРТЫ ----------
+    // ---------- FILLING THE CARD FORM ----------
     //
 
+    // Fills all fields in the Add Card form with provided data
     async fillCardForm ({ name, cardNumber, expiryMonth, expiryYear }) {
-        // на всякий случай убеждаемся, что панель раскрыта
+        // Make sure the panel is expanded before interacting with fields
         await this.openAddNewCardForm();
 
         const nameInput = await this.nameInput;

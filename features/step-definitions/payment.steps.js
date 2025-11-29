@@ -6,16 +6,16 @@ import HomePage from '../pageobjects/home.page.js';
 import LoginPage from '../pageobjects/login.page.js';
 import PaymentPage from '../pageobjects/payment.page.js';
 
-// здесь можешь подставить уже существующего юзера
+// Use an already existing user for login
 const NEW_USER_EMAIL = 'new.user@test.com';
 const NEW_USER_PASSWORD = 'Test1234!';
 
 Given(/^I have logged with a new user$/, async () => {
-    // если юзер уже создан заранее – просто логинимся
+    // If the user already exists – just log in with this account
     await HomePage.open();
     await HomePage.logoutIfLoggedIn();
 
-    // открыть форму логина
+    // Open the login form through the Account menu
     await browser.pause(2000);
     const accountBtn = await HomePage.accountButton;
     await accountBtn.waitForDisplayed({ timeout: 10000 });
@@ -29,8 +29,7 @@ Given(/^I have logged with a new user$/, async () => {
     await browser.execute(el => el.click(), loginBtn);
     await browser.pause(1000);
 
-
-    // логин
+    // Perform login
     await LoginPage.fillEmail(NEW_USER_EMAIL);
     await LoginPage.fillPassword(NEW_USER_PASSWORD);
 
@@ -38,7 +37,7 @@ Given(/^I have logged with a new user$/, async () => {
     await submit.waitForClickable({ timeout: 10000 });
     await submit.click();
 
-    // можно подождать появления корзины/аккаунта как признак успешного логина
+    // Wait for Account button as a sign that login was successful
     await HomePage.accountButton.waitForDisplayed({ timeout: 10000 });
 });
 
@@ -49,8 +48,6 @@ When(/^I press on Orders and Payments$/, async () => {
 When(/^I press My Payment options$/, async () => {
     await PaymentPage.openMyPaymentOptions();
 });
-
-
 
 When(/^I am on My Payment options page$/, async () => {
     await (await PaymentPage.myPaymentOptionsTitle)
@@ -79,7 +76,7 @@ When(/^I submit new card details$/, async () => {
 });
 
 Then(/^I see added card$/, async (dataTable) => {
-    // Таблица вида:
+    // Expected table structure:
     // | Name         | Card Number      | Expiry |
     // | John Goodman | ************5678 | 4/2085 |
     const [, row] = dataTable.raw();
