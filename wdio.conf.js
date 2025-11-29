@@ -132,6 +132,7 @@ export const config = {
             './features/step-definitions/common.steps.js',   
             './features/step-definitions/register.steps.js', 
             './features/step-definitions/reset.password.steps.js',
+            './features/step-definitions/payment.steps.js',
         ],
         // <boolean> show full backtrace for errors
         backtrace: false,

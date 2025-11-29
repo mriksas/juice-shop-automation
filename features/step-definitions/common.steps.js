@@ -8,7 +8,7 @@ Given(/^I open landing page$/, async () => {
 });
 
 Given(/^I have registered account$/, async () => {
-    // предусловие: аккаунт уже создан вручную
+    // account was created manually
 });
 
 Given(/^I have logged out$/, async () => {
